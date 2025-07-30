@@ -1,0 +1,48 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
+
+:root {
+  --background: #ffffff;
+  --foreground: #000000;
+  --heading-font: 'Cormorant Garamond', serif;
+  --body-font: 'Nunito Sans', sans-serif;
+}
+
+/* Apply base styles */
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: sans-serif;
+}
+
+/* Heading styling using your custom variable */
+h1, h2, h3, h4, h5, h6,
+.heading {
+  font-family: var(--heading-font);
+  font-weight: 600;
+  color: #000000;
+}
+p{
+  font-family: var(--body-font);
+  font-weight: 400;
+  color: #000000;
+}
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #ffffff;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
