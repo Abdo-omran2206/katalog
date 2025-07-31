@@ -52,12 +52,12 @@ export default function Home() {
                 <p className=''>Katalog ensures your heartfelt messages are stored securely and delivered only to your loved ones after your passing. Experience peace of mind knowing your legacy will be shared in your own words.</p>
                 <div className='flex flex-row gap-20'>
                   <div className='flex flex-col gap-2'>
-                    <FontAwesomeIcon icon={faShieldAlt} className='text-black w-15' />
+                    <FontAwesomeIcon icon={faShieldAlt} className='text-black w-17' />
                     <h3 className='text-2xl'>Secure Storage</h3>
                     <p className='text-sm'>Your messages are encrypted and safely stored until they are needed.</p>
                   </div>
                   <div className='flex flex-col gap-2'>
-                    <FontAwesomeIcon icon={faExchangeAlt} className='text-black w-15' />
+                    <FontAwesomeIcon icon={faExchangeAlt} className='text-black w-17' />
                     <h3 className='text-2xl'>Personalized Delivery</h3>
                     <p className='text-sm'>Choose when and how your messages are delivered to your chosen recipients.</p>
                   </div>
@@ -139,22 +139,60 @@ export default function Home() {
           </div>
         </section>
 
-        <section className='flex flex-col items-center justify-center bg-[#fafafa] p-10 pt-35 w-screen h-screen'>
-          <div className='bg-amber-300 w-full h-full rounded-4xl flex flex-col gap-10'>
-            <div className='flex flex-col w-[90%] gap-10'>
-              <h1 className='text-5xl tracking-wide'>Explore Our Thoughtful Features for Lasting <br />Connections Beyond Life</h1>
-            </div>
-            <div className='flex flex-row w-screen mt-20'>
-              <div>
-                <FontAwesomeIcon icon={faPaperPlane} className='w-10 text-black'/>
-                <h3>Create, Schedule, and Deliver Messages with Ease and Security</h3>
-                <p>Our platform allows you to craft heartfelt messages in various formats.</p>
+         <section className='bg-gray-100 py-20 px-8'>
+          <div className='max-w-7xl mx-auto'>
+            <h1 className='text-6xl font-light text-gray-900 mb-20 leading-tight'>
+              Explore Our Thoughtful Features for Lasting<br />
+              Connections Beyond Life
+            </h1>
+            
+            <div className='grid grid-cols-1 md:grid-cols-3 gap-16'>
+              {/* First Feature */}
+              <div className='flex flex-col gap-6'>
+                <div className='w-16 h-16 flex items-center justify-center'>
+                  <svg className='w-12 h-12 text-gray-900' fill='currentColor' viewBox='0 0 24 24'>
+                    <path d='M2.01 21L23 12 2.01 3 2 10l15 2-15 2z'/>
+                  </svg>
+                </div>
+                <h3 className='text-2xl font-light text-gray-900 leading-snug'>
+                  Create, Schedule, and Deliver<br />
+                  Messages with Ease and Security
+                </h3>
+                <p className='text-gray-600 text-lg leading-relaxed'>
+                  Our platform allows you to craft heartfelt messages in various formats.
+                </p>
               </div>
-              <div>
-                <FontAwesomeIcon icon={faPerson} className='w-10 text-black'/>
+
+              {/* Second Feature */}
+              <div className='flex flex-col gap-6'>
+                <div className='w-16 h-16 flex items-center justify-center'>
+                  <svg className='w-12 h-12 text-gray-900' fill='currentColor' viewBox='0 0 24 24'>
+                    <path d='M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 7.1C15 7.1 14.9 7 14.8 6.9L13.8 5.9C13.3 5.4 12.7 5.1 12 5.1S10.7 5.4 10.2 5.9L9.2 6.9C9.1 7 9 7.1 9 7.1L3 7V9H7V22H9V16H15V22H17V9H21Z'/>
+                  </svg>
+                </div>
+                <h3 className='text-2xl font-light text-gray-900 leading-snug'>
+                  Empower Your Loved Ones with a<br />
+                  Trusted Digital Trustee System
+                </h3>
+                <p className='text-gray-600 text-lg leading-relaxed'>
+                  Designate a trusted individual to manage your messages after your passing.
+                </p>
               </div>
-              <div>
-                <FontAwesomeIcon icon={faEnvelope} className='w-10 text-black'/>
+
+              {/* Third Feature */}
+              <div className='flex flex-col gap-6'>
+                <div className='w-16 h-16 flex items-center justify-center'>
+                  <svg className='w-12 h-12 text-gray-900' fill='currentColor' viewBox='0 0 24 24'>
+                    <path d='M20 4H4C2.9 4 2.01 4.9 2.01 6L2 18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6C22 4.9 21.1 4 20 4ZM20 8L12 13L4 8V6L12 11L20 6V8Z'/>
+                  </svg>
+                </div>
+                <h3 className='text-2xl font-light text-gray-900 leading-snug'>
+                  Seamless Delivery Methods for Your<br />
+                  Messages When It Matters Most
+                </h3>
+                <p className='text-gray-600 text-lg leading-relaxed'>
+                  Choose how and when your messages are delivered to recipients.
+                </p>
               </div>
             </div>
           </div>
