@@ -198,6 +198,21 @@ export default function Home() {
           </div>
         </section>
 
+        <section className='flex w-screen h-screen items-center justify-center p-20'>
+          <div className='flex flex-row items-center justify-center gap-10 w-full h-full overflow-hidden p-20'>
+            <div className='flex flex-col justify-center text-white rounded-4xl h-full gap-10'>
+              <h1 className='text-5xl'>Create Your Lasting Legacy</h1>
+              <p>Join us today to craft heartfelt messages that will be cherished forever by your loved ones.</p>
+              <div className='flex flex-row gap-5'>
+                <button className='bg-[#ced7de] text-black px-7 py-3 rounded hover:cursor-pointer'>Sign Up</button>
+                <button className='bg-white text-black border border-gray-300 px-6 py-3 rounded hover:cursor-pointer'>Learn More</button>
+              </div>
+            </div>
+            <div className='h-full flex items-center justify-center'>
+              <Image src="/background/default-2.jpg" alt="Description of image" width={1100} height={300} className='w-[100%] h-full object-cover rounded-4xl'/>
+            </div>
+          </div>
+        </section>
       </main>
 
     </div>
