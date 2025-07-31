@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShieldAlt , faExchangeAlt , faPaperPlane , faEnvelope , faPerson} from '@fortawesome/free-solid-svg-icons';
+import { faShieldAlt , faExchangeAlt , faPaperPlane , faEnvelope , faPerson , faAnglesRight } from '@fortawesome/free-solid-svg-icons';
 export default function Home() {
   return (
     <div className='w-screen h-screen overflow-x-hidden'>
@@ -213,6 +213,20 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        <section className='flex w-screen h-screen items-center justify-center p-20 py-0'>
+          <div className='flex flex-row items-center justify-center gap-10 w-full h-full overflow-hidden p-10'>
+            <div className='flex flex-col justify-center text-white rounded-4xl h-full gap-10 w-[70%] '>
+              <FontAwesomeIcon icon={faAnglesRight} className='text-black w-10' />
+              <h1 className='text-5xl'>Empowering Connections Beyond Life's Final Chapter</h1>
+              <p className='text-xl font-bold leading-relaxed'>At Katalog, we believe in the power of words to heal and connect. Our dedicated team is committed to providing a secure platform for creating lasting messages that bring comfort to loved ones.</p>
+            </div>
+            <div className='h-full flex items-center justify-center'>
+              <Image src="/background/default-35.jpg" alt="Description of image" width={1100} height={300} className='w-[100%] h-full object-cover rounded-4xl'/>
+            </div>
+          </div>
+        </section>
+
       </main>
 
     </div>
