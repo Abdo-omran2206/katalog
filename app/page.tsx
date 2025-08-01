@@ -226,9 +226,45 @@ export default function Home() {
             </div>
           </div>
         </section>
-
       </main>
+        <footer className='overflow-hidden bg-[#f2f2f2] w-screen flex relative p-20 pb-5 flex-col'>
+          <div className='w-full flex flex-row justify-between'>
+            <div className='w-[50%] flex flex-col gap-4'>
+              <Image src="/logo.svg" alt="Logo" width={1100} height={300} className='w-50 '/> 
+              <p>Secure Your Messages, Deliver Your Love</p>
+            </div>
 
+            <div className='w-[50%] flex flex-row gap-20'>
+              <ul className='text-black flex flex-col gap-3'>
+                <li><b>Explore More</b></li>
+                <li><a href="">About Us</a></li>
+                <li><a href="">Contact Us</a></li>
+                <li><a href="">Support Center</a></li>
+              </ul>
+
+              <ul className="text-black flex flex-col gap-3">
+                <li><b>Security</b></li>
+                <li><a href="#">Encryption</a></li>
+                <li><a href="#">Privacy</a></li>
+                <li><a href="#">Terms</a></li>
+              </ul>
+
+            </div>
+          </div>
+
+          
+          <div className='mt-30'>
+            <hr className='bg-[rgba(0,0,0,0.3)] h-0.5' />
+            <div className='flex flex-row justify-between items-center mt-5'>
+              <p className='text-gray-500 text-sm'>© {new Date().getFullYear()} Katalog. All rights reserved.</p>
+              <ul className='text-black flex flex-row gap-10'>
+                <li><a href="">Privacy Policy</a></li>
+                <li><a href="">Terms of Service</a></li>
+                <li><a href="">Cookie Settings</a></li>
+              </ul>
+            </div>
+          </div>
+        </footer>
     </div>
   );
 }
