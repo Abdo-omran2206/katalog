@@ -283,7 +283,7 @@ export default function LoginPage() {
 
         <div className="mt-6 text-center">
           <p className="text-gray-600 text-sm">
-            Don't have an account?{' '}
+            Don&apos;t have an account?{' '}
             <button 
               onClick={handleclick}
               className="text-black hover:text-gray-600 font-semibold transition-colors"
