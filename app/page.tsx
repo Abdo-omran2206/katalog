@@ -1,10 +1,23 @@
+'use client';
 import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShieldAlt , faExchangeAlt , faPaperPlane , faEnvelope , faPerson , faAnglesRight } from '@fortawesome/free-solid-svg-icons';
+import { animate, motion } from 'framer-motion';
 export default function Home() {
+  const variants = {
+    initial1:{opacity:0,x:-100},
+    initial2:{opacity:0,x:100},
+    while:{opacity:1,x:0},
+    initial:{opacity:0,y:50},
+    animate:{opacity:1,y:0}
+  }; 
   return (
     <div className='w-screen h-screen overflow-x-hidden'>
-      <nav className='flex relative items-center justify-between p-4 pr-10 text-white w-screen max-sm:pr-4'>
+      <motion.nav
+      initial={{opacity:0 , y:-10}}
+      animate={{opacity:1 , y:0}}
+      transition={{duration:0.5}}
+      className='flex relative items-center justify-between p-4 pr-10 text-white w-screen max-sm:pr-4'>
         <ul className='flex justify-between w-2xs max-sm:hidden'>
           <li><a href="#about" className='text-black'>About Us</a></li>
           <li><a href="#mission" className='text-black'>Our Mission</a></li>
@@ -14,14 +27,22 @@ export default function Home() {
         <button className='bg-[#ced7de] text-black px-4 py-2 rounded hover:cursor-pointer'>
           Sign Up
         </button>
-      </nav>
+      </motion.nav>
 
       <main className='max-sm:mt-10'>
         <section className='flex justify-center items-center w-screen min-h-screen max-sm:mb-10'>
-          <div className='flex bg-[#f2f2f2] rounded-4xl overflow-hidden w-7xl h-[600px] flex-row max-lg:w-[90%] max-md:h-auto max-sm:flex-col max-sm:m-2'>
+          <motion.div 
+          initial={{opacity:0, y:100}}
+          animate={{opacity:1 , y:0}}
+          transition={{duration:1}}
+          className='flex bg-[#f2f2f2] rounded-4xl overflow-hidden w-7xl h-[600px] flex-row max-lg:w-[90%] max-md:h-auto max-sm:flex-col max-sm:m-2'>
             
             {/* Left Section */}
-            <div className='w-[50%] p-10 gap-10 flex flex-col justify-center max-sm:w-full max-sm:gap-6 max-sm:p-6'>
+            <motion.div
+            initial={{opacity:0,x:-100}}
+            animate={{opacity:1,x:0}}
+            transition={{duration:0.5,delay:1.2,ease:'easeOut'}}
+            className='w-[50%] p-10 gap-10 flex flex-col justify-center max-sm:w-full max-sm:gap-6 max-sm:p-6'>
               <h1 className='text-7xl font-[var(--heading)] tracking-wide max-xl:text-5xl max-md:text-4xl max-sm:text-3xl'>
                 Leave a Legacy of Love and Connection
               </h1>
@@ -37,7 +58,7 @@ export default function Home() {
                   Sign Up
                 </button>
               </div>
-            </div>
+            </motion.div>
 
             {/* Right Section */}
             <div className='w-[50%] max-sm:w-full h-full'>
@@ -50,12 +71,16 @@ export default function Home() {
               />
             </div>
             
-          </div>
+          </motion.div>
         </section>
 
-
         <section className='flex flex-col items-center justify-center w-screen bg-[#f2f2f2] p-10 max-sm:p-3 max-sm:pb-15'>
-          <div className='flex w-full h-full flex-col gap-2 items-center justify-center'>
+          <motion.div
+          initial={{opacity:0,y:100}}
+          whileInView={{opacity:1,y:0}}
+          transition={{duration:0.5}}
+          viewport={{amount:0.1,once:true}}
+           className='flex w-full h-full flex-col gap-2 items-center justify-center'>
             <div className='flex flex-row w-full h-full p-10 max-sm:flex-col max-sm:gap-6 max-lg:flex-col'>
               <div className='flex flex-col gap-4 w-[50%] p-5 max-sm:w-full max-sm:p-1 max-lg:w-full'>
                 <h2 className='font-[var(--heading)] text-2xl'>Legacy</h2>
@@ -87,24 +112,36 @@ export default function Home() {
               </div>
             </div>
               <Image src="/background/default-5.jpg" alt='cover' width={1100} height={300} className='object-cover w-[90%] h-180 rounded-4xl max-sm:h-80'/>
-          </div>
+          </motion.div>
         </section>
 
         <section className="flex flex-col items-center bg-white px-6 py-10 w-screen min-h-screen">
 
-          <div className="text-center max-w-3xl mb-16">
+          <motion.div 
+          initial={{opacity:0,y:-50}}
+          whileInView={{opacity:1,y:0}}
+          transition={{duration:0.7}}
+          viewport={{once:true,amount:0.8}}
+          className="text-center max-w-3xl mb-16">
             <h1 className="text-5xl font-semibold leading-tight max-sm:text-4xl">
               Discover how Katalog helps you leave
             </h1>
             <h2 className="text-4xl mt-4 text-gray-700 font-light max-sm:text-3xl">
               meaningful messages for loved ones.
             </h2>
-          </div>
+          </motion.div>
 
 
           <div className="flex flex-wrap gap-10 justify-center items-stretch w-full px-4">
             {/* Card 1 */}
-            <div className="max-w-sm flex flex-col items-center text-center">
+            <motion.div
+            variants={variants} 
+            initial='initial'
+            whileInView='animate'
+            viewport={{once:true}}
+            transition={{ duration: 0.5}}
+
+            className="max-w-sm flex flex-col items-center text-center">
               <Image
                 src="/background/default-11.jpg"
                 alt="Create messages"
@@ -118,10 +155,16 @@ export default function Home() {
               <p className="text-gray-600 mt-2 text-sm">
                 Katalog allows you to craft personal messages that are delivered posthumously.
               </p>
-            </div>
+            </motion.div>
 
             {/* Card 2 */}
-            <div className="max-w-sm flex flex-col items-center text-center">
+            <motion.div 
+            variants={variants} 
+            initial='initial'
+            whileInView='animate'
+            transition={{ duration: 0.5 , delay:1}}
+            viewport={{once:true}}
+            className="max-w-sm flex flex-col items-center text-center">
               <Image
                 src="/background/default-27.jpg"
                 alt="Multimedia formats"
@@ -135,10 +178,16 @@ export default function Home() {
               <p className="text-gray-600 mt-2 text-sm">
                 Choose recipients and set delivery times for your messages.
               </p>
-            </div>
+            </motion.div>
 
             {/* Card 3 */}
-            <div className="max-w-sm flex flex-col items-center text-center">
+            <motion.div 
+            variants={variants} 
+            initial='initial'
+            whileInView='animate'
+            transition={{ duration: 0.5 , delay:1.5}}
+            viewport={{once:true}}
+            className="max-w-sm flex flex-col items-center text-center">
               <Image
                 src="/background/default-37.jpg"
                 alt="Secure storage"
@@ -152,12 +201,17 @@ export default function Home() {
               <p className="text-gray-600 mt-2 text-sm">
                 Rest assured, your messages will only be sent after verification of your passing.
               </p>
-            </div>
+            </motion.div>
           </div>
         </section>
 
          <section className='bg-gray-100 py-20 px-8'>
-          <div className='max-w-7xl mx-auto'>
+          <motion.div 
+          initial={{opacity:0,x:-100}}
+          whileInView={{opacity:1,x:0}}
+          viewport={{once:true,amount:0.4}}
+          transition={{duration:0.8}}
+          className='max-w-7xl mx-auto'>
             <h1 className='text-6xl font-light text-gray-900 mb-20 leading-tight max-sm:text-4xl'>
               Explore Our Thoughtful Features for Lasting<br />
               Connections Beyond Life
@@ -212,37 +266,59 @@ export default function Home() {
                 </p>
               </div>
             </div>
-          </div>
+          </motion.div>
         </section>
 
         <section className='flex w-screen min-h-screen items-center justify-center p-20 max-xl:p-14 max-lg:p-10 max-sm:p-6'>
           <div className='flex flex-row items-center justify-center gap-10 w-full h-full overflow-hidden max-lg:flex-col max-lg:p-0'>
-            <div className='flex flex-col justify-center text-white rounded-4xl w-[100%] gap-10 max-lg:w-full max-lg:px-4'>
+            <motion.div 
+            variants={variants}
+            initial='initial1'
+            whileInView='while'
+            transition={{duration:0.5}}
+            viewport={{once:true,amount:0.5}}
+            className='flex flex-col justify-center text-white rounded-4xl w-[100%] gap-10 max-lg:w-full max-lg:px-4'>
               <h1 className='text-5xl max-md:text-4xl max-sm:text-3xl'>Create Your Lasting Legacy</h1>
               <p className='text-lg max-sm:text-base'>Join us today to craft heartfelt messages that will be cherished forever by your loved ones.</p>
               <div className='flex flex-row gap-5 flex-wrap'>
                 <button className='bg-[#ced7de] text-black px-7 py-3 rounded hover:bg-[#b6c2cb] transition-colors duration-200 hover:cursor-pointer'>Sign Up</button>
                 <button className='bg-white text-black border border-gray-300 px-6 py-3 rounded hover:bg-gray-100 hover:border-gray-400 transition-colors duration-200 hover:cursor-pointer'>Learn More</button>
               </div>
-            </div>
-            <div className='h-full flex items-center justify-center w-full max-lg:mt-10'>
+            </motion.div>
+            <motion.div 
+            initial='initial2'
+            whileInView='while'
+            transition={{duration:0.5}}
+            viewport={{once:true,amount:0.5}}
+            className='h-full flex items-center justify-center w-full max-lg:mt-10'>
               <Image src="/background/default-2.jpg" alt="Description of image" width={1100} height={300} className='w-full h-full max-h-[400px] object-cover rounded-4xl' />
-            </div>
+            </motion.div>
           </div>
         </section>
 
         <section className='flex w-screen min-h-screen items-center justify-center px-20 py-0 max-xl:px-14 max-lg:px-10 max-sm:px-4 max-sm:py-10'>
           <div className='flex flex-row items-center justify-center gap-10 w-full overflow-hidden max-lg:flex-col'>
-            <div className='flex flex-col justify-center text-white rounded-4xl gap-10 w-[70%] max-lg:w-full max-lg:px-4'>
+            <motion.div 
+            variants={variants}
+            initial='initial1'
+            whileInView='while'
+            transition={{duration:0.5}}
+            viewport={{once:true,amount:0.5}}
+            className='flex flex-col justify-center text-white rounded-4xl gap-10 w-[70%] max-lg:w-full max-lg:px-4'>
               <FontAwesomeIcon icon={faAnglesRight} className='text-black w-10' />
               <h1 className='text-5xl max-md:text-4xl max-sm:text-3xl'>Empowering Connections Beyond Life&apos;s Final Chapter</h1>
               <p className='text-xl font-bold leading-relaxed max-md:text-lg max-sm:text-base'>
                 At Katalog, we believe in the power of words to heal and connect. Our dedicated team is committed to providing a secure platform for creating lasting messages that bring comfort to loved ones.
               </p>
-            </div>
-            <div className='h-full flex items-center justify-center w-full max-lg:mt-10'>
+            </motion.div>
+            <motion.div 
+            initial='initial2'
+            whileInView='while'
+            transition={{duration:0.5}}
+            viewport={{once:true,amount:0.5}}
+            className='h-full flex items-center justify-center w-full max-lg:mt-10'>
               <Image src="/background/default-35.jpg" alt="Description of image" width={1100} height={300} className='w-full h-full max-h-[400px] object-cover rounded-4xl' />
-            </div>
+            </motion.div>
           </div>
         </section>
 
