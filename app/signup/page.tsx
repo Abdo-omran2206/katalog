@@ -102,6 +102,12 @@ export default function RegisterPage() {
   const passwordStrength = getPasswordStrength(formData.password);
   const strengthColors = ['bg-red-500', 'bg-red-400', 'bg-yellow-500', 'bg-gray-600', 'bg-black'];
   const strengthLabels = ['Very Weak', 'Weak', 'Fair', 'Good', 'Strong'];
+  
+  function setCookie(name:string, value:string, days = 7) {
+    const expires = new Date(Date.now() + days * 864e5).toUTCString(); // 864e5 = 86400000 ms = 1 day
+    document.cookie = `${encodeURIComponent(name)}=${encodeURIComponent(value)}; expires=${expires}; path=/`;
+  }
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -121,7 +127,7 @@ export default function RegisterPage() {
       
       try {
         // API call to register user
-        const response = await fetch('/api/auth/register', {
+        const response = await fetch('http://localhost/api/account/signup.php', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -133,20 +139,20 @@ export default function RegisterPage() {
             gender: formData.gender
           }),
         });
-
-        if (response.ok) {
+        const data = await response.json()
+        if (data.success) {
           setIsSuccess(true);
-          
+          setCookie('token',data.data.random_code)
           // Reset form after success
           setTimeout(() => {
             router.replace('/dashboard')
           }, 3000);
         } else {
-          const errorData = await response.json();
-          setErrors({ submit: errorData.message || 'Registration failed' });
+          setErrors({ submit: data.message || 'Registration failed' });
         }
       } catch (error) {
         setErrors({ submit: 'Network error. Please try again.' });
+        console.log(error);
       } finally {
         setIsSubmitting(false);
       }
@@ -180,6 +186,7 @@ export default function RegisterPage() {
           <p className="text-gray-600 mt-2">Join us and start your journey</p>
         </div>
 
+        <form onSubmit={handleSubmit}>
         <div className="space-y-6">
           {/* Error Display */}
           {errors.submit && (
@@ -192,6 +199,7 @@ export default function RegisterPage() {
           )}
 
           {/* Name Field */}
+          
           <div className="relative">
             <label htmlFor="name" className="block text-sm font-semibold text-black mb-2">
               Full Name
@@ -415,13 +423,14 @@ export default function RegisterPage() {
               'Create Account'
             )}
           </button>
+          
         </div>
-
+        </form>
         <div className="mt-6 text-center">
           <p className="text-gray-600 text-sm">
             Already have an account?{' '}
             <button className="text-black hover:text-gray-600 font-semibold transition-colors" onClick={handleclick}>
-              Sign in
+              Login
             </button>
           </p>
         </div>

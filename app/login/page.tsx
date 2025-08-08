@@ -69,6 +69,11 @@ export default function LoginPage() {
     const error = validateField(name as keyof FormData, value);
     setErrors(prev => ({ ...prev, [name]: error }));
   };
+  function setCookie(name:string, value:string, days = 7) {
+    const expires = new Date(Date.now() + days * 864e5).toUTCString(); // 864e5 = 86400000 ms = 1 day
+    document.cookie = `${encodeURIComponent(name)}=${encodeURIComponent(value)}; expires=${expires}; path=/`;
+  }
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -88,7 +93,7 @@ export default function LoginPage() {
       
       try {
         // API call to login user
-        const response = await fetch('/api/auth/login', {
+        const response = await fetch('http://localhost/api/account/login.php', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -102,14 +107,14 @@ export default function LoginPage() {
 
         const data = await response.json();
 
-        if (response.ok) {
+        if (data.success) {
           // Store token if needed
-          if (data.token) {
-            localStorage.setItem('token', data.token);
-          }
+          setCookie('token',data.code)
           
           // Redirect to dashboard or home page
-          router.push('/dashboard');
+          setTimeout(() => {
+            router.replace('/dashboard')
+          }, 1000);
         } else {
           setErrors({ submit: data.message || 'Login failed' });
         }
@@ -141,7 +146,7 @@ export default function LoginPage() {
           </h1>
           <p className="text-gray-600 mt-2">Sign in to your account</p>
         </div>
-
+        <form onSubmit={handleSubmit}>
         <div className="space-y-6">
           {/* Error Display */}
           {errors.submit && (
@@ -152,7 +157,7 @@ export default function LoginPage() {
               </p>
             </div>
           )}
-
+          
           {/* Email Field */}
           <div className="relative">
             <label htmlFor="email" className="block text-sm font-semibold text-black mb-2">
@@ -280,7 +285,7 @@ export default function LoginPage() {
 
           
         </div>
-
+        </form>
         <div className="mt-6 text-center">
           <p className="text-gray-600 text-sm">
             Don&apos;t have an account?{' '}

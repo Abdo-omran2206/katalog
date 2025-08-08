@@ -2,8 +2,11 @@
 import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShieldAlt , faExchangeAlt , faPaperPlane , faEnvelope , faPerson , faAnglesRight } from '@fortawesome/free-solid-svg-icons';
-import { animate, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
+
 export default function Home() {
+  const router = useRouter();
   const variants = {
     initial1:{opacity:0,x:-100},
     initial2:{opacity:0,x:100},
@@ -24,8 +27,8 @@ export default function Home() {
           <li><a href="#services" className='text-black'>Services</a></li>
         </ul>
         <Image src="/logo.png" alt="Logo" width={100} height={100} className='absolute m-auto left-[47%] max-sm:relative max-sm:left-0 max-sm:m-0'/>
-        <button className='bg-[#ced7de] text-black px-4 py-2 rounded hover:cursor-pointer'>
-          Sign Up
+        <button onClick={() => {router.push('/login')}} className='bg-[#ced7de] text-black px-4 py-2 rounded hover:cursor-pointer'>
+          Login
         </button>
       </motion.nav>
 
@@ -54,7 +57,7 @@ export default function Home() {
                 <button className='hover:cursor-pointer bg-slate-700 text-white px-6 py-2 rounded-lg hover:bg-slate-800 transition-colors duration-200 font-semibold shadow-md'>
                   Learn More
                 </button>
-                <button className='hover:cursor-pointer border-slate-700 border-2 text-slate-700 px-6 py-2 rounded-lg hover:bg-slate-700 hover:text-white transition-all duration-200 font-semibold'>
+                <button onClick={() => {router.push('/signup')}} className='hover:cursor-pointer border-slate-700 border-2 text-slate-700 px-6 py-2 rounded-lg hover:bg-slate-700 hover:text-white transition-all duration-200 font-semibold'>
                   Sign Up
                 </button>
               </div>
@@ -104,7 +107,7 @@ export default function Home() {
                   <button className='text-black border border-black px-5 py-3 hover:bg-slate-800 hover:text-white transition duration-300 ease-in-out rounded-2xl hover:cursor-pointer max-sm:p-3'>
                     Learn More
                   </button>
-                  <button className="text-black rounded-2xl px-5 py-3 border border-transparent after:content-['>'] after:ml-2 hover:border-black hover:bg-gray-100 hover:shadow-md transition-all duration-300 ease-in-out hover:cursor-pointer max-sm:px-3">
+                  <button onClick={() => {router.push('/signup')}} className="text-black rounded-2xl px-5 py-3 border border-transparent after:content-['>'] after:ml-2 hover:border-black hover:bg-gray-100 hover:shadow-md transition-all duration-300 ease-in-out hover:cursor-pointer max-sm:px-3">
                     Sign Up
                   </button>
                 </div>
@@ -281,7 +284,7 @@ export default function Home() {
               <h1 className='text-5xl max-md:text-4xl max-sm:text-3xl'>Create Your Lasting Legacy</h1>
               <p className='text-lg max-sm:text-base'>Join us today to craft heartfelt messages that will be cherished forever by your loved ones.</p>
               <div className='flex flex-row gap-5 flex-wrap'>
-                <button className='bg-[#ced7de] text-black px-7 py-3 rounded hover:bg-[#b6c2cb] transition-colors duration-200 hover:cursor-pointer'>Sign Up</button>
+                <button onClick={() => {router.push('/login')}} className='bg-[#ced7de] text-black px-7 py-3 rounded hover:bg-[#b6c2cb] transition-colors duration-200 hover:cursor-pointer'>Login</button>
                 <button className='bg-white text-black border border-gray-300 px-6 py-3 rounded hover:bg-gray-100 hover:border-gray-400 transition-colors duration-200 hover:cursor-pointer'>Learn More</button>
               </div>
             </motion.div>
