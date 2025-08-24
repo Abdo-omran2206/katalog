@@ -103,9 +103,9 @@ export default function RegisterPage() {
   const strengthColors = ['bg-red-500', 'bg-red-400', 'bg-yellow-500', 'bg-gray-600', 'bg-black'];
   const strengthLabels = ['Very Weak', 'Weak', 'Fair', 'Good', 'Strong'];
   
-  function setCookie(name:string, value:string, days = 7) {
-    const expires = new Date(Date.now() + days * 864e5).toUTCString(); // 864e5 = 86400000 ms = 1 day
-    document.cookie = `${encodeURIComponent(name)}=${encodeURIComponent(value)}; expires=${expires}; path=/`;
+  function setCookie(name:string, value:string) {
+    localStorage.setItem(name,value);
+    localStorage.setItem('remember',"true");
   }
 
 
@@ -127,7 +127,7 @@ export default function RegisterPage() {
       
       try {
         // API call to register user
-        const response = await fetch('http://localhost/api/account/signup.php', {
+        const response = await fetch('http://katalog-blond.getenjoyment.net/api/account/signup.php', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

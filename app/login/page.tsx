@@ -71,9 +71,16 @@ export default function LoginPage() {
   };
 
 
-  function setCookie(name:string, value:string, days = 7) {
-    const expires = new Date(Date.now() + days * 864e5).toUTCString(); // 864e5 = 86400000 ms = 1 day
-    document.cookie = `${encodeURIComponent(name)}=${encodeURIComponent(value)}; expires=${expires}; path=/`;
+  function setCookie(name:string, value:string, Remember:boolean) {
+    if(Remember){
+      localStorage.setItem(name,value);
+      sessionStorage.removeItem(name);
+      localStorage.setItem('remember',"true");
+    }else{
+      sessionStorage.setItem(name,value);
+      localStorage.removeItem(name);
+      localStorage.setItem('remember',"false");
+    }
   }
 
 
@@ -95,7 +102,7 @@ export default function LoginPage() {
       
       try {
         // API call to login user
-        const response = await fetch('http://localhost/api/account/login.php', {
+        const response = await fetch('http://katalog-blond.getenjoyment.net/api/account/login.php', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -111,9 +118,9 @@ export default function LoginPage() {
         if (data.success) {
           // Store token if needed
           if(rememberMe){
-            setCookie('token',data.code)
+            setCookie('token',data.code,true)
           }else{
-            setCookie('token',data.code,1);
+            setCookie('token',data.code,false);
           }
           setIsRedirecting(true); // Show loading overlay
           // Redirect to dashboard or home page

@@ -25,12 +25,23 @@ function DashboardPage(){
         gender: '',
         email: ''
     });
+    function getCookie(name: string): string {
+      if (typeof window === "undefined") {
+        return '';
+      }
+      if (window.localStorage.getItem('remember') === "true") {
+        return window.localStorage.getItem(name) || '';
+      } else {
+        return window.sessionStorage.getItem(name) || '';
+      }
+    }
 
     async function getProfile() {
         try {
-            const response = await fetch('http://localhost/api/account/profile.php', {
-                credentials: 'include',
+            const response = await fetch(`http://katalog-blond.getenjoyment.net/api/account/profile.php?token=${getCookie('token')}`, {
+                method: 'GET',
             });
+          console.log('Profile fetch response:', response);
             const data = await response.json();
 
             if (data.success) {
@@ -51,26 +62,30 @@ function DashboardPage(){
     const renderContent = () => {
         switch (content) {
             case 'Home':
-                return <Maincontent />;
+                return <Maincontent token={getCookie('token')} />;
             case 'Messages':
-                return <Messages />;
+                return <Messages token={getCookie('token')}/>;
             case 'Recipients':
-                return <Recipients />;
+                return <Recipients token={getCookie('token')}/>;
             case 'Trustees':
-                return <Trustees />;
+                return <Trustees token={getCookie('token')}/>;
             // case 'Settings':
             //     return <Setting />;
             default:
                 return null;
         }
     };
+
     useEffect(() =>{
         getProfile();
-
     },[]) 
 
     const logout = () =>{
-        document.cookie = `token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+        if(localStorage.getItem('remember') === "true"){
+          localStorage.removeItem('token');
+        }else{
+          sessionStorage.removeItem('token');
+        }
         router.replace('/login');
     }
 

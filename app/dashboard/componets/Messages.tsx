@@ -16,16 +16,15 @@ interface Message {
     message: string; // This is a JSON string that needs to be parsed
 }
 
-function Messages(){
+function Messages({ token }: { token: string }){
     const [messages, setMessages] = useState<MessageData[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     async function getMessages(){
         try {
-            const response = await fetch('http://localhost/api/message/getmessage.php',{
+            const response = await fetch('http://katalog-blond.getenjoyment.net/api/message/getmessage.php?token=' + token,{
                 method:'GET',
-                credentials:'include'
             });
             const data = await response.json();
             if(data.success){

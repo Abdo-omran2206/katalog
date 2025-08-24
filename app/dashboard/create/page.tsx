@@ -63,7 +63,16 @@ function CreateMessage(){
     const removeFile = (index: number) => {
         setSelectedFiles(prev => prev.filter((_, i) => i !== index));
     };
-
+    function getCookie(name: string): string {
+      if (typeof window === "undefined") {
+        return '';
+      }
+      if (window.localStorage.getItem('remember') === "true") {
+        return window.localStorage.getItem(name) || '';
+      } else {
+        return window.sessionStorage.getItem(name) || '';
+      }
+    }
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
@@ -89,10 +98,9 @@ function CreateMessage(){
         });
         console.log(formData);
         try {
-            const response = await fetch('http://localhost/api/message/createmessage.php', {
+            const response = await fetch('http://katalog-blond.getenjoyment.net/api/message/createmessage.php?token=' + getCookie('token'), {
                 method: 'POST',
-                body: formData,
-                credentials: 'include'
+                body: formData
             });
             
             if (response.ok) {

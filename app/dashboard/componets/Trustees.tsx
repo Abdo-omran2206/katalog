@@ -17,7 +17,7 @@ interface VerificationSettings {
     inactivityPeriod: number;
 }
 
-function Trustees() {
+function Trustees({ token }: { token: string }) {
 
     const [verificationSettings, setVerificationSettings] = useState<VerificationSettings>({
         method: 'inactivity',
@@ -31,9 +31,14 @@ function Trustees() {
 
     const handleCheckIn = () => {
 
-        fetch('http://localhost/api/account/trustees.php', {
+        fetch('http://katalog-blond.getenjoyment.net/api/account/trustees.php', {
             method: 'POST',
-            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                token : token
+            })
         })
         .then(res => {
             if (!res.ok) {
@@ -57,9 +62,8 @@ function Trustees() {
     };
 
     async function getTrustees() {
-        const response = await fetch('http://localhost/api/account/trustees.php',{
+        const response = await fetch('http://katalog-blond.getenjoyment.net/api/account/trustees.php?token=' + token,{
             method:'GET',
-            credentials:'include'
         })
         const data = await response.json()
         if(data.success){
@@ -80,13 +84,13 @@ function Trustees() {
 
     const saveSettings = () => {
         setIsEditing(false);
-        fetch('http://localhost/api/account/trustees.php', {
+        fetch('http://katalog-blond.getenjoyment.net/api/account/trustees.php', {
             method: 'PUT',
-            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
+                token: token,
                 updateDefault: verificationSettings.inactivityPeriod
             })
         })

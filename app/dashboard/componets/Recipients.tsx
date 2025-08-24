@@ -8,9 +8,8 @@ interface Recipient {
     message_count: number;
 }
 
-function Recipients() {
+function Recipients({ token }: { token: string }) {
     const [recipients, setRecipients] = useState<Recipient[]>([]);
-
     const [searchTerm, setSearchTerm] = useState("");
 
     const filteredRecipients = recipients.filter(recipient => {
@@ -20,15 +19,33 @@ function Recipients() {
     });
 
     async function getRecipients() {
-        const response = await fetch('http://localhost/api/message/recipient.php',{
-            method:'GET',
-            credentials:'include'
-        })
-        const data = await response.json()
-        if(data.success){
-            setRecipients(data.data)
+        try {
+            const response = await fetch(
+                `http://katalog-blond.getenjoyment.net/api/message/recipient.php?token=${encodeURIComponent(token)}`,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            if (data.success) {
+                setRecipients(data.data);
+            } else {
+                console.error("API Error:", data.message || data.error);
+            }
+        } catch (error) {
+            console.error("Fetch failed:", error);
         }
     }
+
     
     useEffect(()=>{
         getRecipients()

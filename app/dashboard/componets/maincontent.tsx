@@ -18,7 +18,7 @@ interface Message {
     message: string; // This is a JSON string that needs to be parsed
 }
 
-function Maincontent(){
+function Maincontent({ token }: { token: string }) {
     const router = useRouter();
     const [contentM, setcontentM] = useState<MessageData[]>([]);
     const [loading, setLoading] = useState(true);
@@ -26,11 +26,12 @@ function Maincontent(){
 
     async function getMessages(){
         try {
-            const response = await fetch('http://localhost/api/message/getmessage.php',{
+            const response = await fetch('http://katalog-blond.getenjoyment.net/api/message/getmessage.php?token='+token,{
                 method:'GET',
-                credentials:'include'
             });
+
             const data = await response.json();
+            
             if(data.success){
                 // Parse each message's JSON string into actual objects
                 const parsedMessages = data.messages.map((msg: Message) => {
