@@ -98,7 +98,7 @@ function CreateMessage(){
         });
         console.log(formData);
         try {
-            const response = await fetch('http://katalog-blond.getenjoyment.net/api/message/createmessage.php?token=' + getCookie('token'), {
+            const response = await fetch('http://localhost/api/message/createmessage.php?token=' + getCookie('token'), {
                 method: 'POST',
                 body: formData
             });

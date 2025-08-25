@@ -102,7 +102,7 @@ export default function LoginPage() {
       
       try {
         // API call to login user
-        const response = await fetch('http://katalog-blond.getenjoyment.net/api/account/login.php', {
+        const response = await fetch('http://localhost/api/account/login.php', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

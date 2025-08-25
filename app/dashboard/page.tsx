@@ -38,7 +38,7 @@ function DashboardPage(){
 
     async function getProfile() {
         try {
-            const response = await fetch(`http://katalog-blond.getenjoyment.net/api/account/profile.php?token=${getCookie('token')}`, {
+            const response = await fetch(`http://localhost/api/account/profile.php?token=${getCookie('token')}`, {
                 method: 'GET',
             });
           console.log('Profile fetch response:', response);

@@ -23,7 +23,7 @@ function Messages({ token }: { token: string }){
 
     async function getMessages(){
         try {
-            const response = await fetch('http://katalog-blond.getenjoyment.net/api/message/getmessage.php?token=' + token,{
+            const response = await fetch('http://localhost/api/message/getmessage.php?token=' + token,{
                 method:'GET',
             });
             const data = await response.json();
