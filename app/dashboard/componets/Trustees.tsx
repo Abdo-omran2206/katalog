@@ -31,7 +31,7 @@ function Trustees({ token }: { token: string }) {
 
     const handleCheckIn = () => {
 
-        fetch('http://katalog-blond.getenjoyment.net/api/account/trustees.php', {
+        fetch('http://localhost/api/account/trustees.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -62,7 +62,7 @@ function Trustees({ token }: { token: string }) {
     };
 
     async function getTrustees() {
-        const response = await fetch('http://katalog-blond.getenjoyment.net/api/account/trustees.php?token=' + token,{
+        const response = await fetch('http://localhost/api/account/trustees.php?token=' + token,{
             method:'GET',
         })
         const data = await response.json()
@@ -84,7 +84,7 @@ function Trustees({ token }: { token: string }) {
 
     const saveSettings = () => {
         setIsEditing(false);
-        fetch('http://katalog-blond.getenjoyment.net/api/account/trustees.php', {
+        fetch('http://localhost/api/account/trustees.php', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

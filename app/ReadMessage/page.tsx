@@ -24,7 +24,7 @@ function ReadMessage() {
     function getmessage(e: React.FormEvent){
         e.preventDefault();
         const code = document.getElementById('messageCode') as HTMLInputElement;
-        fetch('http://katalog-blond.getenjoyment.net/api/message/readmessage.php',{
+        fetch('http://localhost/api/message/readmessage.php',{
             method:'POST',
             headers:{
                 'Content-Type': 'application/json',

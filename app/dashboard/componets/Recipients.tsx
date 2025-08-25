@@ -21,7 +21,7 @@ function Recipients({ token }: { token: string }) {
     async function getRecipients() {
         try {
             const response = await fetch(
-                `http://katalog-blond.getenjoyment.net/api/message/recipient.php?token=${encodeURIComponent(token)}`,
+                `http://localhost/api/message/recipient.php?token=${encodeURIComponent(token)}`,
                 {
                     method: 'GET',
                     headers: {

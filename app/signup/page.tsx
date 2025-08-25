@@ -127,7 +127,7 @@ export default function RegisterPage() {
       
       try {
         // API call to register user
-        const response = await fetch('http://katalog-blond.getenjoyment.net/api/account/signup.php', {
+        const response = await fetch('http://localhost/api/account/signup.php', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
