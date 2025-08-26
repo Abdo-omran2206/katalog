@@ -1,9 +1,9 @@
 'use client';
-
 import React, { useState } from 'react';
 import { Eye, EyeOff, User, Mail, Lock, Check, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-
+import { supabase } from "@/app/lib/supabaseClient";
+import bcrypt from 'bcryptjs';
 interface FormData {
   name: string;
   email: string;
@@ -107,7 +107,9 @@ export default function RegisterPage() {
     localStorage.setItem(name,value);
     localStorage.setItem('remember',"true");
   }
-
+  function randomCode(length = 30) {
+    return Math.random().toString(36).substring(2, 2 + length);
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -123,32 +125,44 @@ export default function RegisterPage() {
     setTouched(Object.keys(formData).reduce((acc, key) => ({ ...acc, [key]: true }), {} as Touched));
     
     if (Object.keys(newErrors).length === 0) {
-      setIsSubmitting(true);
-      
       try {
         // API call to register user
-        const response = await fetch('http://katalog-blond.getenjoyment.net/api/account/signup.php', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            name: formData.name,
-            email: formData.email,
-            password: formData.password,
-            gender: formData.gender
-          }),
+        const password = await bcrypt.hash(formData.password, 10);
+        const randomCodeValue = randomCode(30);
+        const { data , error } = await supabase.from('accounts').insert({
+          email: formData.email,
+          password_hashed: password,
+          username: formData.name,
+          gender: formData.gender,
+          random_code: randomCodeValue
+        }).select();
+        const now = new Date();
+
+        // Add 3 months
+        const threeMonthsLater = new Date(now);
+        threeMonthsLater.setMonth(now.getMonth() + 3);
+
+
+        const { data: trusteeData, error: trusteeError } = await supabase.from('trustees').insert({
+          senderid: randomCodeValue,
+          lastcheck: new Date().toLocaleString(),
+          default: 3,
+          sendin: threeMonthsLater.toLocaleString()
         });
-        const data = await response.json()
-        if (data.success) {
-          setIsSuccess(true);
-          setCookie('token',data.data.random_code)
-          // Reset form after success
-          setTimeout(() => {
-            router.replace('/dashboard')
-          }, 3000);
+
+        if (error) {
+          setErrors({ submit: error.message });
         } else {
-          setErrors({ submit: data.message || 'Registration failed' });
+          
+          console.log(data);
+
+          if(data && data.length > 0 && !trusteeError){
+            setIsSuccess(true);
+            setCookie('token',randomCodeValue);
+            setTimeout(() => {
+              router.push('/dashboard');
+            }, 2000);
+          }
         }
       } catch (error) {
         setErrors({ submit: 'Network error. Please try again.' });
@@ -157,7 +171,7 @@ export default function RegisterPage() {
         setIsSubmitting(false);
       }
     }
-  };
+  }
 
   if (isSuccess) {
     return (

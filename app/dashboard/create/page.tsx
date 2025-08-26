@@ -4,7 +4,7 @@ import { ArrowLeft, Plus, X, Upload } from 'lucide-react'
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Swal from "sweetalert2";
-
+import { supabase } from "@/app/lib/supabaseClient";
 
 function CreateMessage(){
     const router = useRouter();
@@ -14,7 +14,7 @@ function CreateMessage(){
     const [isDragOver, setIsDragOver] = useState(false);
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
     const [isLoading, setIsLoading] = useState(false);
-    
+
     const navigatetocraete = () =>{
         router.push("/dashboard")
     }
@@ -77,57 +77,106 @@ function CreateMessage(){
         e.preventDefault();
         setIsLoading(true);
         
-        const formData = new FormData();
-        
-        // Add form fields
-        const titleInput = document.getElementById('title') as HTMLInputElement;
-        const messageInput = document.getElementById('content') as HTMLTextAreaElement;
-        
-        formData.append('title', titleInput.value);
-        formData.append('message', messageInput.value);
-        
-        // Add recipients
-        recipients.forEach((recipient, index) => {
-            formData.append(`recepment_name_${index}`, recipient.name);
-            formData.append(`recepment_number_${index}`, recipient.phone);
-        });
-        
-        // Add files
-        selectedFiles.forEach((file) => {
-            formData.append('files[]', file);
-        });
-        console.log(formData);
         try {
-            const response = await fetch('http://katalog-blond.getenjoyment.net/api/message/createmessage.php?token=' + getCookie('token'), {
-                method: 'POST',
-                body: formData
-            });
-            
-            if (response.ok) {
-                const result = await response.json();
-                if(result.success){
-                    Swal.fire({
-                        title:'message saved',
-                        icon:'success',
-                        text:result.message
-                    }).then(() => {
-                        router.replace("/dashboard");
-                    });
-                }else{
-                    Swal.fire({
-                        title:'message not svaed',
-                        icon:'error',
-                        text:result.message
-                    })
-                }
-            } else {
-                console.error('Error:', response.statusText);
+            const token = getCookie("token"); // identifies the sender (or map to senderId)
+
+            // 1. Get sendin value for this trustee
+            const { data: trustees, error: trusteeError } = await supabase
+                .from("trustees")
+                .select("sendin")
+                .eq("senderid", token)
+                .single();
+
+            if (trusteeError) {
+                console.error("Error fetching trustee sendin:", trusteeError.message);
+                return;
             }
+
+            // === Upload files first ===
+            const uploadedFiles: string[] = [];
+            const messageId:string = crypto.randomUUID();
+            for (const file of selectedFiles) {
+                const { error: uploadError } = await supabase.storage
+                    .from("katalog-files")
+                    .upload(`${messageId}/${file.name}`, file, {
+                        cacheControl: "3600",
+                        upsert: false,
+                    });
+
+                if (uploadError) throw uploadError;
+
+                const { data: publicUrl } = supabase.storage
+                    .from("katalog-files")
+                    .getPublicUrl(`${messageId}/${file.name}`);
+
+                uploadedFiles.push(publicUrl.publicUrl);
+                console.log(uploadedFiles);
+                
+            }
+
+            // === Build the message object (with uploaded file URLs) ===
+            const messageData = {
+                message: {
+                    title: (document.getElementById("title") as HTMLInputElement).value,
+                    content: (document.getElementById("content") as HTMLTextAreaElement).value,
+                    recipients: recipients.length,
+                    files: uploadedFiles, // store public URLs of uploaded files
+                    submitted_at: new Date().toISOString().split("T")[0],
+                },
+                messageid: messageId,
+                senderid: token,
+                sendin: trustees.sendin,
+            };
+
+            // === Insert message ===
+            const { data: messageRow, error: messageError } = await supabase
+                .from("messages")
+                .insert([messageData])
+                .select()
+                .single();
+
+            if (messageError) throw messageError;
+
+            // === Insert recipients ===
+            const recipientsPayload = recipients.map((r) => ({
+                username: r.name,
+                phone_number: r.phone,
+                recepment_code: crypto.randomUUID(),
+                message_id: messageRow.messageid,
+                senderid: messageRow.senderid,
+                sendin: messageRow.sendin,
+            }));
+
+            const { error: recepmentError } = await supabase
+                .from("recepment")
+                .insert(recipientsPayload);
+
+            if (recepmentError) throw recepmentError;
+
+            // Success alert
+            Swal.fire({
+                title: "Message saved",
+                icon: "success",
+                text: "Your message, recipients, and files have been saved successfully.",
+            }).then(() => {
+                router.replace("/dashboard");
+            });
+
         } catch (error) {
-            console.error('Error submitting form:', error);
+            console.error("Error saving message:", error);
+            Swal.fire({
+                title: "Message not saved",
+                icon: "error",
+                text:
+                    typeof error === "object" && error !== null && "message" in error
+                        ? (error as { message?: string }).message || "Unexpected error occurred"
+                        : "Unexpected error occurred",
+            });
         } finally {
             setIsLoading(false);
         }
+
+
     };
 
     return(

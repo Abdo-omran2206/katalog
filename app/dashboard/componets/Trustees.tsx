@@ -2,16 +2,7 @@
 import { useEffect, useState } from "react";
 import { Shield, Clock, AlertTriangle, Edit } from 'lucide-react';
 import Swal from "sweetalert2";
-
-interface Trustee {
-    id: number;
-    name: string;
-    email: string;
-    phone: string;
-    relationship: string;
-    lastContact?: string;
-}
-
+import { supabase } from "@/app/lib/supabaseClient";
 interface VerificationSettings {
     method: 'inactivity' | 'trustee' | 'combined';
     inactivityPeriod: number;
@@ -23,58 +14,86 @@ function Trustees({ token }: { token: string }) {
         method: 'inactivity',
         inactivityPeriod: 3
     });
-
     const [isEditing, setIsEditing] = useState(false);
     const [checkInStatus, setCheckInStatus] = useState({
         lastCheckIn: '0000-00-00',
     });
 
-    const handleCheckIn = () => {
+    const handleCheckIn = async () => {
+        try {
+            // current timestamp
+            const now = new Date();
+            // Add 3 months
+            const threeMonthsLater = new Date(now);
+            threeMonthsLater.setMonth(now.getMonth() + verificationSettings.inactivityPeriod);
 
-        fetch('http://katalog-blond.getenjoyment.net/api/account/trustees.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                token : token
+            const { data, error } = await supabase
+            .from("trustees")
+            .update({
+                lastcheck: new Date().toLocaleString(), // 👈 update check-in timestamp
+                sendin: threeMonthsLater.toLocaleString()
             })
-        })
-        .then(res => {
-            if (!res.ok) {
-                throw new Error(`HTTP error! status: ${res.status}`);
-            }
-            return res.json();
-        })
-        .then(data => {
-             Swal.fire({
-                title:data.title,
-                icon:'success',
-                text:data.message
-            })
-            setCheckInStatus({
-                lastCheckIn: data.newDate
+            .eq("senderid", token) // 👈 filter by user identity (adjust if needed)
+            .select()
+            .single(); // only one row expected
+
+            if (error) {
+            console.error("Supabase Error:", error.message);
+            Swal.fire({
+                title: "Error",
+                icon: "error",
+                text: error.message,
             });
-        }).catch(err => {
-            console.error('Fetch error:', err);
-        });
+            return;
+            }
 
-    };
+            if (data) {
+            Swal.fire({
+                title: "Check-in Successful",
+                icon: "success",
+                text: `Last check-in updated and next check-in scheduled for ${threeMonthsLater.toLocaleString()}.`,
+            });
+
+            setCheckInStatus({
+                lastCheckIn: data.lastcheck, // updated timestamp from DB
+            });
+            }
+        } catch (err) {
+            console.error("Update failed:", err);
+            Swal.fire({
+            title: "Network Error",
+            icon: "error",
+            text: "Failed to check-in. Please try again.",
+            });
+        }
+        };
+
 
     async function getTrustees() {
-        const response = await fetch('http://katalog-blond.getenjoyment.net/api/account/trustees.php?token=' + token,{
-            method:'GET',
-        })
-        const data = await response.json()
-        if(data.success){
-            const parsetdata =  data.message;
-            setVerificationSettings(prev => ({
+        try {
+            const { data, error } = await supabase
+            .from("trustees")
+            .select("default, lastcheck") // 👈 adjust column names if different
+            .eq("senderid", token)     // 👈 or eq("senderId", userId) depending on schema
+            .single(); // expect just one row
+
+            if (error) {
+            console.error("Supabase Error:", error.message);
+            return;
+            }
+
+            if (data) {
+            setVerificationSettings((prev) => ({
                 ...prev,
-                inactivityPeriod:  parsetdata.default// new value
+                inactivityPeriod: data.default, // from trustees table
             }));
+
             setCheckInStatus({
-                lastCheckIn: parsetdata.lastcheck
+                lastCheckIn: data.lastcheck,
             });
+            }
+        } catch (err) {
+            console.error("Query failed:", err);
         }
     }
 
@@ -82,40 +101,51 @@ function Trustees({ token }: { token: string }) {
         getTrustees()
     },[])
 
-    const saveSettings = () => {
-        setIsEditing(false);
-        fetch('http://katalog-blond.getenjoyment.net/api/account/trustees.php', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                token: token,
-                updateDefault: verificationSettings.inactivityPeriod
-            })
-        })
-        .then(res => {
-            if (!res.ok) {
-                throw new Error(`HTTP error! status: ${res.status}`);
-            }
-            return res.json();
-        })
-        .then(data => {
-            console.log('Success:', data);
-            Swal.fire({
-                title:data.title,
-                icon:'success',
-                text:data.message
-            })
-        })
-        .catch(err => {
-            console.error('Fetch error:', err);
-        });
+    const saveSettings = async () => {
+        try {
+            setIsEditing(false);
+            const now = new Date();
 
-        
-        
-        // Here you would typically save to backend
-    };
+            // Add 3 months
+            const threeMonthsLater = new Date(now);
+            threeMonthsLater.setMonth(now.getMonth() + verificationSettings.inactivityPeriod);
+            const { data, error } = await supabase
+            .from("trustees")
+            .update({
+                default: verificationSettings.inactivityPeriod, // 👈 update field
+                sendin: threeMonthsLater.toLocaleString()
+            })
+            .eq("senderid", token) // 👈 filter condition (adjust to your schema)
+            .select(); // return the updated row(s)
+
+            if (error) {
+            console.error("Supabase Error:", error.message);
+            Swal.fire({
+                title: "Error",
+                icon: "error",
+                text: error.message,
+            });
+            return;
+            }
+
+            if (data) {
+            console.log("Success:", data);
+            Swal.fire({
+                title: "Settings Saved",
+                icon: "success",
+                text: `Your verification settings have been updated and your check-in period has been extended to ${threeMonthsLater.toLocaleString()}.`,
+            });
+            }
+        } catch (err) {
+            console.error("Update failed:", err);
+            Swal.fire({
+            title: "Network Error",
+            icon: "error",
+            text: "Failed to save settings. Please try again.",
+            });
+        }
+        };
+
 
     return (
         <div className="space-y-6 max-sm:space-y-4">
