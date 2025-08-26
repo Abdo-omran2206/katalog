@@ -127,19 +127,6 @@ export default function RegisterPage() {
     if (Object.keys(newErrors).length === 0) {
       try {
         // API call to register user
-<<<<<<< HEAD
-        const response = await fetch('http://localhost/api/account/signup.php', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            name: formData.name,
-            email: formData.email,
-            password: formData.password,
-            gender: formData.gender
-          }),
-=======
         const password = await bcrypt.hash(formData.password, 10);
         const randomCodeValue = randomCode(30);
         const { data , error } = await supabase.from('accounts').insert({
@@ -161,7 +148,6 @@ export default function RegisterPage() {
           lastcheck: new Date().toLocaleString(),
           default: 3,
           sendin: threeMonthsLater.toLocaleString()
->>>>>>> dev
         });
 
         if (error) {

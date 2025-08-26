@@ -104,20 +104,7 @@ export default function LoginPage() {
       
       try {
         // API call to login user
-<<<<<<< HEAD
-        const response = await fetch('http://localhost/api/account/login.php', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            email: formData.email,
-            password: formData.password,
-          }),
-        });
-=======
         const { data:users  , error } = await supabase.from('accounts').select('random_code ,password_hashed').eq('email', formData.email).single();
->>>>>>> dev
 
         if(error || !users){
           setErrors({ submit: 'Invalid email or password' });

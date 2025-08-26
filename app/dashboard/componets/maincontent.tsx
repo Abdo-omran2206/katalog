@@ -18,11 +18,6 @@ function Maincontent({ token }: { token: string }) {
 
     async function getMessages(){
         try {
-<<<<<<< HEAD
-            const response = await fetch('http://localhost/api/message/getmessage.php?token='+token,{
-                method:'GET',
-            });
-=======
         // query messages for this user (using token / senderId or however you link user)
         const { data, error } = await supabase
             .from("messages")
@@ -30,7 +25,6 @@ function Maincontent({ token }: { token: string }) {
             .eq("senderid", token)      // 👈 adjust filter column based on your schema
             .order("created_at", { ascending: false }) // newest first
             .limit(3); // only last 3 messages
->>>>>>> dev
 
         if (error) {
             setError(error.message || "Failed to fetch messages");

@@ -20,22 +20,10 @@ function Recipients({ token }: { token: string }) {
 
     async function getRecipients() {
         try {
-<<<<<<< HEAD
-            const response = await fetch(
-                `http://localhost/api/message/recipient.php?token=${encodeURIComponent(token)}`,
-                {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }
-            );
-=======
         const { data, error } = await supabase
             .from("recepment")
             .select("username, phone_number, message_id")
             .eq("senderid", token); // 👈 adjust filter (depends on your schema)
->>>>>>> dev
 
         if (error) {
             console.error("Supabase Error:", error.message);

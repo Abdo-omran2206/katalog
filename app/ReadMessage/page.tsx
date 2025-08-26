@@ -26,19 +26,6 @@ function ReadMessage() {
     async function getmessage(e: React.FormEvent) {
         e.preventDefault();
         const code = document.getElementById('messageCode') as HTMLInputElement;
-<<<<<<< HEAD
-        fetch('http://localhost/api/message/readmessage.php',{
-            method:'POST',
-            headers:{
-                'Content-Type': 'application/json',
-            },
-            body:JSON.stringify({
-                message_code:code.value
-            })
-        }).then(res => {
-            if (!res.ok) {
-                throw new Error(`HTTP error! status: ${res.status}`);
-=======
         const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
 
         try {
@@ -56,7 +43,6 @@ function ReadMessage() {
                     icon: "error"
                 });
                 return;
->>>>>>> dev
             }
 
             // 2. Fetch the message itself

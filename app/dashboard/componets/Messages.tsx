@@ -17,15 +17,6 @@ function Messages({ token }: { token: string }){
 
     async function getMessages(){
         try {
-<<<<<<< HEAD
-            const response = await fetch('http://localhost/api/message/getmessage.php?token=' + token,{
-                method:'GET',
-            });
-            const data = await response.json();
-            if(data.success){
-                // Parse each message's JSON string into actual objects
-                const parsedMessages = data.messages.map((msg: Message) => {
-=======
             const { data, error } = await supabase
                 .from("messages")
                 .select("message")
@@ -38,7 +29,6 @@ function Messages({ token }: { token: string }){
                 // Parse JSON messages into objects (if stored as JSON string)
                 const parsedMessages = data
                 .map((msg) => {
->>>>>>> dev
                     try {
                     return typeof msg.message === "string"
                         ? JSON.parse(msg.message)

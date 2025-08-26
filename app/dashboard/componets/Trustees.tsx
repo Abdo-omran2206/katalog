@@ -27,21 +27,11 @@ function Trustees({ token }: { token: string }) {
             const threeMonthsLater = new Date(now);
             threeMonthsLater.setMonth(now.getMonth() + verificationSettings.inactivityPeriod);
 
-<<<<<<< HEAD
-        fetch('http://localhost/api/account/trustees.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                token : token
-=======
             const { data, error } = await supabase
             .from("trustees")
             .update({
                 lastcheck: new Date().toLocaleString(), // 👈 update check-in timestamp
                 sendin: threeMonthsLater.toLocaleString()
->>>>>>> dev
             })
             .eq("senderid", token) // 👈 filter by user identity (adjust if needed)
             .select()
@@ -80,15 +70,6 @@ function Trustees({ token }: { token: string }) {
 
 
     async function getTrustees() {
-<<<<<<< HEAD
-        const response = await fetch('http://localhost/api/account/trustees.php?token=' + token,{
-            method:'GET',
-        })
-        const data = await response.json()
-        if(data.success){
-            const parsetdata =  data.message;
-            setVerificationSettings(prev => ({
-=======
         try {
             const { data, error } = await supabase
             .from("trustees")
@@ -103,7 +84,6 @@ function Trustees({ token }: { token: string }) {
 
             if (data) {
             setVerificationSettings((prev) => ({
->>>>>>> dev
                 ...prev,
                 inactivityPeriod: data.default, // from trustees table
             }));
@@ -121,37 +101,6 @@ function Trustees({ token }: { token: string }) {
         getTrustees()
     },[])
 
-<<<<<<< HEAD
-    const saveSettings = () => {
-        setIsEditing(false);
-        fetch('http://localhost/api/account/trustees.php', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                token: token,
-                updateDefault: verificationSettings.inactivityPeriod
-            })
-        })
-        .then(res => {
-            if (!res.ok) {
-                throw new Error(`HTTP error! status: ${res.status}`);
-            }
-            return res.json();
-        })
-        .then(data => {
-            console.log('Success:', data);
-            Swal.fire({
-                title:data.title,
-                icon:'success',
-                text:data.message
-            })
-        })
-        .catch(err => {
-            console.error('Fetch error:', err);
-        });
-=======
     const saveSettings = async () => {
         try {
             setIsEditing(false);
@@ -196,7 +145,6 @@ function Trustees({ token }: { token: string }) {
             });
         }
         };
->>>>>>> dev
 
 
     return (
