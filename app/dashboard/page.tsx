@@ -79,7 +79,7 @@ function DashboardPage(){
         }else{
           sessionStorage.removeItem('token');
         }
-        router.replace('/login');
+        router.replace('/');
     }
 
     const showUserDitails = () => {
