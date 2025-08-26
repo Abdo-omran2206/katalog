@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { Search, Phone, User } from 'lucide-react';
-
+import { supabase } from "@/app/lib/supabaseClient";
 interface Recipient {
     username: string;
     phone_number: string;
@@ -20,6 +20,7 @@ function Recipients({ token }: { token: string }) {
 
     async function getRecipients() {
         try {
+<<<<<<< HEAD
             const response = await fetch(
                 `http://localhost/api/message/recipient.php?token=${encodeURIComponent(token)}`,
                 {
@@ -29,20 +30,36 @@ function Recipients({ token }: { token: string }) {
                     }
                 }
             );
+=======
+        const { data, error } = await supabase
+            .from("recepment")
+            .select("username, phone_number, message_id")
+            .eq("senderid", token); // 👈 adjust filter (depends on your schema)
+>>>>>>> dev
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
+        if (error) {
+            console.error("Supabase Error:", error.message);
+        } else if (data) {
+            // count how many messages per recipient
+            const recipientsMap = new Map<string, Recipient>();
 
-            const data = await response.json();
-
-            if (data.success) {
-                setRecipients(data.data);
+            data.forEach((row) => {
+            const key = `${row.username}-${row.phone_number}`;
+            if (!recipientsMap.has(key)) {
+                recipientsMap.set(key, {
+                username: row.username,
+                phone_number: row.phone_number,
+                message_count: 1,
+                });
             } else {
-                console.error("API Error:", data.message || data.error);
+                recipientsMap.get(key)!.message_count += 1;
             }
+            });
+
+            setRecipients(Array.from(recipientsMap.values()));
+        }
         } catch (error) {
-            console.error("Fetch failed:", error);
+        console.error("Query failed:", error);
         }
     }
 

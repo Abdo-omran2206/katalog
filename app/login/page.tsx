@@ -1,8 +1,10 @@
 'use client';
+export const dynamic = 'force-dynamic';
 import React, { useState } from 'react';
 import { Eye, EyeOff, Mail, Lock, Check, X, LogIn } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-
+import bcrypt from 'bcryptjs';
+import { supabase } from "@/app/lib/supabaseClient";
 interface FormData {
   email: string;
   password: string;
@@ -102,6 +104,7 @@ export default function LoginPage() {
       
       try {
         // API call to login user
+<<<<<<< HEAD
         const response = await fetch('http://localhost/api/account/login.php', {
           method: 'POST',
           headers: {
@@ -112,27 +115,38 @@ export default function LoginPage() {
             password: formData.password,
           }),
         });
+=======
+        const { data:users  , error } = await supabase.from('accounts').select('random_code ,password_hashed').eq('email', formData.email).single();
+>>>>>>> dev
 
-        const data = await response.json();
-
-        if (data.success) {
-          // Store token if needed
-          if(rememberMe){
-            setCookie('token',data.code,true)
-          }else{
-            setCookie('token',data.code,false);
-          }
-          setIsRedirecting(true); // Show loading overlay
-          // Redirect to dashboard or home page
-          setTimeout(() => {
-            router.replace('/dashboard')
-          }, 1000);
-        } else {
-          setErrors({ submit: data.message || 'Login failed' });
+        if(error || !users){
+          setErrors({ submit: 'Invalid email or password' });
         }
-      } catch (error) {
-        setErrors({ submit: 'Network error. Please try again.'+error });
-      } finally {
+
+        let isPasswordValid = false;
+        if (users && users.password_hashed) {
+          isPasswordValid = await bcrypt.compare(formData.password, users.password_hashed);
+        }
+
+        if(!isPasswordValid){
+          setErrors({ submit: 'Invalid email or password' });
+        }
+
+        if(users && isPasswordValid){
+          // Save token
+          setCookie('token', users.random_code, rememberMe);
+          
+          // Redirect to dashboard
+          setIsRedirecting(true);
+          setTimeout(() => {
+            router.push('/dashboard');
+          }, 1500);
+        }
+
+      }catch (error) {
+        setErrors({ submit: 'Network error. Please try again.' });
+        console.log(error);
+      }finally{
         setIsSubmitting(false);
       }
     }

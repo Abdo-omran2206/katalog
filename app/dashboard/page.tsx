@@ -6,9 +6,9 @@ import Maincontent from "./componets/maincontent";
 import Messages from "./componets/Messages";
 import Recipients from "./componets/Recipients";
 import Trustees from "./componets/Trustees";
-// import Setting from "./componets/Settings";, Settings
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
+import { supabase } from "@/app/lib/supabaseClient";
 
 interface Userinfo{
     username: string,
@@ -38,6 +38,7 @@ function DashboardPage(){
 
     async function getProfile() {
         try {
+<<<<<<< HEAD
             const response = await fetch(`http://localhost/api/account/profile.php?token=${getCookie('token')}`, {
                 method: 'GET',
             });
@@ -54,6 +55,19 @@ function DashboardPage(){
                 console.warn('Profile fetch not successful:', data);
                 setthercookie(false)
             }
+=======
+          const { data, error } = await supabase.from('accounts').select('username,email,gender').eq('random_code', getCookie('token'));
+          if (error) {
+            throw error;
+          }
+          if(data.length === 0){
+            setthercookie(false)
+          }
+          if (data && data.length > 0) {
+            setuserinfo(data[0]);
+            setthercookie(true);
+          }
+>>>>>>> dev
         } catch (error) {
             console.error('Error fetching profile:', error);
         }
@@ -69,8 +83,6 @@ function DashboardPage(){
                 return <Recipients token={getCookie('token')}/>;
             case 'Trustees':
                 return <Trustees token={getCookie('token')}/>;
-            // case 'Settings':
-            //     return <Setting />;
             default:
                 return null;
         }
@@ -86,7 +98,7 @@ function DashboardPage(){
         }else{
           sessionStorage.removeItem('token');
         }
-        router.replace('/login');
+        router.replace('/');
     }
 
     const showUserDitails = () => {
