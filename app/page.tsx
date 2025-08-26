@@ -1,7 +1,6 @@
 'use client';
 import Image from 'next/image';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShieldAlt , faExchangeAlt , faAnglesRight } from '@fortawesome/free-solid-svg-icons';
+import { Lock, Mail, Check, Send, ShieldCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 
@@ -93,12 +92,12 @@ export default function Home() {
                 <p className=''>Katalog ensures your heartfelt messages are stored securely and delivered only to your loved ones after your passing. Experience peace of mind knowing your legacy will be shared in your own words.</p>
                 <div className='flex flex-row gap-20 max-sm:flex-col'>
                   <div className='flex flex-col gap-2'>
-                    <FontAwesomeIcon icon={faShieldAlt} className='text-black w-17 max-sm:w-13' />
+                    <Lock size={68} className='text-black' />
                     <h3 className='text-2xl'>Secure Storage</h3>
                     <p className='text-sm'>Your messages are encrypted and safely stored until they are needed.</p>
                   </div>
                   <div className='flex flex-col gap-2'>
-                    <FontAwesomeIcon icon={faExchangeAlt} className='text-black w-17 max-sm:w-13' />
+                    <Mail size={68} className='text-black' />
                     <h3 className='text-2xl'>Personalized Delivery</h3>
                     <p className='text-sm'>Choose when and how your messages are delivered to your chosen recipients.</p>
                   </div>
@@ -224,9 +223,7 @@ export default function Home() {
               {/* First Feature */}
               <div className='flex flex-col gap-6'>
                 <div className='w-16 h-16 flex items-center justify-center'>
-                  <svg className='w-12 h-12 text-gray-900' fill='currentColor' viewBox='0 0 24 24'>
-                    <path d='M2.01 21L23 12 2.01 3 2 10l15 2-15 2z'/>
-                  </svg>
+                  <Send size={48} className='text-gray-900' />
                 </div>
                 <h3 className='text-2xl font-light text-gray-900 leading-snug'>
                   Create, Schedule, and Deliver<br />
@@ -240,9 +237,7 @@ export default function Home() {
               {/* Second Feature */}
               <div className='flex flex-col gap-6'>
                 <div className='w-16 h-16 flex items-center justify-center'>
-                  <svg className='w-12 h-12 text-gray-900' fill='currentColor' viewBox='0 0 24 24'>
-                    <path d='M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 7.1C15 7.1 14.9 7 14.8 6.9L13.8 5.9C13.3 5.4 12.7 5.1 12 5.1S10.7 5.4 10.2 5.9L9.2 6.9C9.1 7 9 7.1 9 7.1L3 7V9H7V22H9V16H15V22H17V9H21Z'/>
-                  </svg>
+                  <ShieldCheck size={48} className='text-gray-900' />
                 </div>
                 <h3 className='text-2xl font-light text-gray-900 leading-snug'>
                   Empower Your Loved Ones with a<br />
@@ -256,9 +251,7 @@ export default function Home() {
               {/* Third Feature */}
               <div className='flex flex-col gap-6'>
                 <div className='w-16 h-16 flex items-center justify-center'>
-                  <svg className='w-12 h-12 text-gray-900' fill='currentColor' viewBox='0 0 24 24'>
-                    <path d='M20 4H4C2.9 4 2.01 4.9 2.01 6L2 18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6C22 4.9 21.1 4 20 4ZM20 8L12 13L4 8V6L12 11L20 6V8Z'/>
-                  </svg>
+                  <Mail size={48} className='text-gray-900' />
                 </div>
                 <h3 className='text-2xl font-light text-gray-900 leading-snug'>
                   Seamless Delivery Methods for Your<br />
@@ -308,7 +301,7 @@ export default function Home() {
             transition={{duration:0.5}}
             viewport={{once:true,amount:0.5}}
             className='flex flex-col justify-center text-white rounded-4xl gap-10 w-[70%] max-lg:w-full max-lg:px-4'>
-              <FontAwesomeIcon icon={faAnglesRight} className='text-black w-10' />
+              <Check size={40} className='text-black' />
               <h1 className='text-5xl max-md:text-4xl max-sm:text-3xl'>Empowering Connections Beyond Life&apos;s Final Chapter</h1>
               <p className='text-xl font-bold leading-relaxed max-md:text-lg max-sm:text-base'>
                 At Katalog, we believe in the power of words to heal and connect. Our dedicated team is committed to providing a secure platform for creating lasting messages that bring comfort to loved ones.
