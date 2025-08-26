@@ -38,24 +38,6 @@ function DashboardPage(){
 
     async function getProfile() {
         try {
-<<<<<<< HEAD
-            const response = await fetch(`http://localhost/api/account/profile.php?token=${getCookie('token')}`, {
-                method: 'GET',
-            });
-          console.log('Profile fetch response:', response);
-            const data = await response.json();
-
-            if (data.success) {
-                if (data.userinfo) {
-                    const parsedata = JSON.parse(data.userinfo);
-                    setuserinfo(parsedata.user)
-                    setthercookie(true)
-                }
-            } else {
-                console.warn('Profile fetch not successful:', data);
-                setthercookie(false)
-            }
-=======
           const { data, error } = await supabase.from('accounts').select('username,email,gender').eq('random_code', getCookie('token'));
           if (error) {
             throw error;
@@ -67,7 +49,6 @@ function DashboardPage(){
             setuserinfo(data[0]);
             setthercookie(true);
           }
->>>>>>> dev
         } catch (error) {
             console.error('Error fetching profile:', error);
         }

@@ -78,32 +78,6 @@ function CreateMessage(){
         setIsLoading(true);
         
         try {
-<<<<<<< HEAD
-            const response = await fetch('http://localhost/api/message/createmessage.php?token=' + getCookie('token'), {
-                method: 'POST',
-                body: formData
-            });
-            
-            if (response.ok) {
-                const result = await response.json();
-                if(result.success){
-                    Swal.fire({
-                        title:'message saved',
-                        icon:'success',
-                        text:result.message
-                    }).then(() => {
-                        router.replace("/dashboard");
-                    });
-                }else{
-                    Swal.fire({
-                        title:'message not svaed',
-                        icon:'error',
-                        text:result.message
-                    })
-                }
-            } else {
-                console.error('Error:', response.statusText);
-=======
             const token = getCookie("token"); // identifies the sender (or map to senderId)
 
             // 1. Get sendin value for this trustee
@@ -116,7 +90,6 @@ function CreateMessage(){
             if (trusteeError) {
                 console.error("Error fetching trustee sendin:", trusteeError.message);
                 return;
->>>>>>> dev
             }
 
             // === Upload files first ===
